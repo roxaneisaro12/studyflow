@@ -148,7 +148,7 @@ The project helped me understand how component state, rendering and lifecycle be
 
 ## Walkthrough Video
 
-[Watch the StudyFlow Project Walkthrough](ADD_YOUR_VIDEO_URL)
+[Watch the StudyFlow Project Walkthrough] : https://drive.google.com/file/d/1CfFeTcYyo4av6Semc4AB22b3isadzYlD/view?usp=sharing
 
 ---
 
