@@ -1,48 +1,156 @@
+
 # StudyFlow
 
-A responsive React study planner for managing coursework, tracking completion and focusing in timed sessions. Built with React 19, Vite, Tailwind CSS and React Router DOM. All data is local to the browser; no API or backend.
+StudyFlow is a responsive study planner built with React. It helps students organise assignments, track progress and manage focused study sessions in one place.
 
+## Live Demo
+
+[View StudyFlow Live](ADD_YOUR_DEPLOYED_WEBSITE_URL)
+
+## GitHub Repository
+
+https://github.com/roxaneisaro12/studyflow
 
 ## Features
-- Dashboard summary and upcoming task preview
-- Task CRUD: add, edit, delete and complete tasks
-- Search, category/status filtering and due-date or alphabetical sorting
-- Study / short-break timer with interval cleanup
-- Personal display name, session length and encouragement preference
-- Browser persistence via `localStorage`
-- Responsive sidebar and mobile navigation
 
+- Dashboard with task statistics and completion progress.
+- Create, edit, complete and delete study tasks.
+- Search tasks by title.
+- Filter tasks by status and category.
+- Sort tasks alphabetically or by due date.
+- Validate task forms.
+- Focus timer with study and break sessions.
+- Personal settings for display name and study duration.
+- Encouragement message preference.
+- Persistent tasks and settings using localStorage.
+- Responsive navigation for desktop and mobile.
+- Custom 404 page for unknown routes.
 
-## Component ownership
-`App.jsx` owns the shared tasks array and settings because both Dashboard and Tasks pages use that data. State is passed down as props and updates are sent upward through callbacks. `FocusPage` owns its timer state so timer ticks do not re-render the entire app.
+## Technologies Used
 
+- React 19
+- Vite
+- React Router DOM
+- JavaScript
+- CSS
+- Browser localStorage
 
-## Custom hooks
-- `useLocalStorage`: restore and persist task/preferences state
-- `useToggle`: show/hide the task form
-- `useDocumentTitle`: set page title through an Effect
-- `useDebounce`: delay search updates and clean up pending timeout
+## Project Structure
 
+```text
+src/
+├── components/
+│   ├── Button.jsx
+│   ├── FocusTimer.jsx
+│   ├── SectionCard.jsx
+│   ├── TaskCard.jsx
+│   └── TaskForm.jsx
+├── data/
+│   └── initialTasks.js
+├── hooks/
+│   ├── useDebounce.js
+│   ├── useDocumentTitle.js
+│   ├── useLocalStorage.js
+│   └── useToggle.js
+├── layouts/
+│   └── SiteLayout.jsx
+├── pages/
+│   ├── App.jsx
+│   ├── DashboardPage.jsx
+│   ├── FocusPage.jsx
+│   ├── NotFoundPage.jsx
+│   ├── SettingsPage.jsx
+│   └── TasksPage.jsx
+├── App.jsx
+├── index.css
+└── main.jsx
+```
 
-## Render behavior
-React re-renders components when their state or props change. A render does not necessarily mean the browser DOM changes; React compares the result and commits only needed updates. The timer state is kept inside FocusPage to limit unrelated renders. Task filtering/counts are derived from the source array rather than duplicated in state. The React Compiler can automate some memoization; this small project does not need manual memoization for these simple lists.
+## Custom Hooks
 
+| Hook | Purpose |
+|---|---|
+| `useLocalStorage` | Saves and retrieves tasks and settings from browser storage. |
+| `useToggle` | Manages boolean state for showing and hiding the task form. |
+| `useDocumentTitle` | Updates the browser tab title when navigating between pages. |
+| `useDebounce` | Delays task search updates to avoid filtering on every keystroke. |
 
-## Run locally
+## Component Design
+
+StudyFlow uses reusable components to keep the application organised.
+
+- `Button` provides consistent button styling and behaviour.
+- `SectionCard` groups related page content.
+- `TaskCard` displays individual tasks and their actions.
+- `TaskForm` handles task creation, editing and validation.
+- `FocusTimer` manages the focus countdown independently.
+- `SiteLayout` provides shared navigation and page structure.
+
+## State Management
+
+React state is used to manage tasks, settings, form inputs, filters and timer controls.
+
+Tasks and settings are persisted using the browser's localStorage API. Task updates use immutable state changes.
+
+The FocusTimer component uses `useEffect` to manage its interval and clean it up when the component unmounts or the timer stops.
+
+## Routing
+
+React Router DOM provides the following routes:
+
+| Route | Page |
+|---|---|
+| `/` | Dashboard |
+| `/tasks` | Tasks |
+| `/focus` | Focus |
+| `/settings` | Settings |
+| `*` | Not Found |
+
+## Installation and Setup
+
+Clone the repository:
+
+```bash
+git clone https://github.com/roxaneisaro12/studyflow.git
+```
+
+Navigate into the project:
+
+```bash
+cd studyflow
+```
+
+Install dependencies:
+
 ```bash
 npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
-Build check:
+Build for production:
+
 ```bash
 npm run build
 ```
 
-## Walkthrough video
-Add your 3–5 minute walkthrough URL here after recording.
+## Lessons Learned
 
-## Submission links
-- GitHub: add repository URL after pushing
-- Live website: add deployment URL after deploying
-- Walkthrough video: add recording URL
+Through this project, I practised building reusable React components, passing data through props, managing shared and local state, and handling forms.
+
+I also learned how to use React Router for navigation, custom hooks for reusable logic, useEffect for side effects and cleanup, useRef for focusing inputs and managing timer intervals, and localStorage for persistent browser data.
+
+The project helped me understand how component state, rendering and lifecycle behaviour work together in a React application.
+
+## Walkthrough Video
+
+[Watch the StudyFlow Project Walkthrough](ADD_YOUR_VIDEO_URL)
+
+---
+
+**Project:** StudyFlow  
+**Developer:** Roxane Isaro
