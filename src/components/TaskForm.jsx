@@ -1,4 +1,106 @@
-import {useState,useEffect} from 'react'
+
+import { useState, useEffect } from 'react'
 import Button from './Button'
-const blank={title:'',category:'Programming',dueDate:'',priority:'Medium'}
-export default function TaskForm({task,onSave,onCancel}){const [form,setForm]=useState(blank);const [error,setError]=useState('');useEffect(()=>{setForm(task?{title:task.title,category:task.category,dueDate:task.dueDate,priority:task.priority}:blank);setError('')},[task]);function change(e){setForm(f=>({...f,[e.target.name]:e.target.value}))}function submit(e){e.preventDefault();if(!form.title.trim()){setError('Please enter a task title.');return}onSave({...form,title:form.title.trim(),completed:task?.completed||false,id:task?.id||Date.now()});setForm(blank)}return <form className="task-form" onSubmit={submit}><div className="form-grid"><label>Task title<input autoFocus value={form.title} name="title" onChange={change} placeholder="What do you need to study?"/></label><label>Category<select name="category" value={form.category} onChange={change}>{['Programming','Networking','Database','Projects','Personal','Other'].map(x=><option key={x}>{x}</option>)}</select></label><label>Due date<input type="date" name="dueDate" value={form.dueDate} onChange={change}/></label><label>Priority<select name="priority" value={form.priority} onChange={change}>{['Low','Medium','High'].map(x=><option key={x}>{x}</option>)}</select></label></div>{error&&<p className="error">{error}</p>}<div className="form-actions"><Button type="submit">{task?'Save changes':'Add task'}</Button><Button variant="secondary" onClick={onCancel}>Cancel</Button></div></form>}
+
+const blank = {
+  title: '',
+  category: 'Programming',
+  dueDate: '',
+  priority: 'Medium'
+}
+
+export default function TaskForm({ task, onSave, onCancel, ref }) {
+  const [form, setForm] = useState(blank)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    setForm(task
+      ? {
+          title: task.title,
+          category: task.category,
+          dueDate: task.dueDate,
+          priority: task.priority
+        }
+      : blank
+    )
+    setError('')
+  }, [task])
+
+  function change(e) {
+    setForm(current => ({
+      ...current,
+      [e.target.name]: e.target.value
+    }))
+  }
+
+  function submit(e) {
+    e.preventDefault()
+
+    if (!form.title.trim()) {
+      setError('Please enter a task title.')
+      ref?.current?.focus()
+      return
+    }
+
+    onSave({
+      ...form,
+      title: form.title.trim(),
+      completed: task?.completed || false,
+      id: task?.id || Date.now()
+    })
+
+    setForm(blank)
+  }
+
+  return (
+    <form className="task-form" onSubmit={submit}>
+      <div className="form-grid">
+        <label>
+          Task title
+          <input
+            ref={ref}
+            value={form.title}
+            name="title"
+            onChange={change}
+            placeholder="What do you need to study?"
+          />
+        </label>
+
+        <label>
+          Category
+          <select name="category" value={form.category} onChange={change}>
+            {['Programming', 'Networking', 'Database', 'Projects', 'Personal', 'Other'].map(x => (
+              <option key={x}>{x}</option>
+            ))}
+          </select>
+        </label>
+
+        <label>
+          Due date
+          <input
+            type="date"
+            name="dueDate"
+            value={form.dueDate}
+            onChange={change}
+          />
+        </label>
+
+        <label>
+          Priority
+          <select name="priority" value={form.priority} onChange={change}>
+            {['Low', 'Medium', 'High'].map(x => (
+              <option key={x}>{x}</option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      {error && <p className="error">{error}</p>}
+
+      <div className="form-actions">
+        <Button type="submit">{task ? 'Save changes' : 'Add task'}</Button>
+        <Button variant="secondary" onClick={onCancel}>Cancel</Button>
+      </div>
+    </form>
+  )
+}
