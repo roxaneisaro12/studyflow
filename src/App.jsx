@@ -1,0 +1,11 @@
+import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import {useState} from 'react'
+import {initialTasks} from './data/initialTasks'
+import {useLocalStorage} from './hooks/useLocalStorage'
+import SiteLayout from './layouts/SiteLayout'
+import DashboardPage from './pages/DashboardPage'
+import TasksPage from './pages/TasksPage'
+import FocusPage from './pages/FocusPage'
+import SettingsPage from './pages/SettingsPage'
+import NotFoundPage from './pages/NotFoundPage'
+export default function App(){const [tasks,setTasks]=useLocalStorage('studyflow-tasks',initialTasks);const [settings,setSettings]=useLocalStorage('studyflow-settings',{name:'',duration:25,encouragement:true});const [editing,setEditing]=useState(null);function saveTask(task){setTasks(current=>editing?current.map(t=>t.id===task.id?task:t):[task,...current]);setEditing(null)}function toggleTask(id){setTasks(current=>current.map(t=>t.id===id?{...t,completed:!t.completed}:t))}function deleteTask(id){setTasks(current=>current.filter(t=>t.id!==id));if(editing?.id===id)setEditing(null)}function editTask(task){setEditing(task)}function cancelEdit(){setEditing(null)}return <BrowserRouter><SiteLayout name={settings.name}><Routes><Route path="/" element={<DashboardPage tasks={tasks} name={settings.name} onToggle={toggleTask} onEdit={editTask} onDelete={deleteTask}/>}/><Route path="/tasks" element={<TasksPage tasks={tasks} onSave={saveTask} onToggle={toggleTask} onEdit={editTask} onDelete={deleteTask} editing={editing} onCancelEdit={cancelEdit}/>}/><Route path="/focus" element={<FocusPage duration={settings.duration}/>}/><Route path="/settings" element={<SettingsPage settings={settings} setSettings={setSettings}/>}/><Route path="*" element={<NotFoundPage/>}/></Routes></SiteLayout></BrowserRouter>}
