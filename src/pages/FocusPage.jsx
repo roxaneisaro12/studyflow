@@ -1,5 +1,82 @@
-import {useState,useEffect,useRef} from 'react'
-import Button from '../components/Button'
+
+import { useState } from 'react'
 import SectionCard from '../components/SectionCard'
-import {useDocumentTitle} from '../hooks/useDocumentTitle'
-export default function FocusPage({duration}){useDocumentTitle('Focus');const [mode,setMode]=useState('Study');const [seconds,setSeconds]=useState(duration*60);const [running,setRunning]=useState(false);const intervalRef=useRef(null);useEffect(()=>{setRunning(false);setSeconds(mode==='Study'?duration*60:5*60);return()=>{if(intervalRef.current)clearInterval(intervalRef.current)}},[mode,duration]);useEffect(()=>{if(!running)return;intervalRef.current=setInterval(()=>setSeconds(s=>{if(s<=1){clearInterval(intervalRef.current);setRunning(false);return 0}return s-1}),1000);return()=>clearInterval(intervalRef.current)},[running]);const mm=String(Math.floor(seconds/60)).padStart(2,'0'),ss=String(seconds%60).padStart(2,'0');const reset=()=>{setRunning(false);setSeconds(mode==='Study'?duration*60:5*60)};return <><div className="page-heading"><div><p className="eyebrow">MAKE SPACE FOR DEEP WORK</p><h1>Focus room</h1><p className="muted">Step away from distractions and work on one thing.</p></div></div><div className="focus-grid"><SectionCard title="Focus timer" subtitle="Choose a session and settle in"><div className="timer-modes"><button className={mode==='Study'?'selected':''} onClick={()=>setMode('Study')}>Study · {duration} min</button><button className={mode==='Break'?'selected':''} onClick={()=>setMode('Break')}>Short break · 5 min</button></div><div className="timer-display"><div className="timer-circle"><span>{mm}:{ss}</span><small>{running?'SESSION IN PROGRESS':seconds===0?'SESSION COMPLETE':'READY WHEN YOU ARE'}</small></div></div><div className="timer-controls"><Button onClick={()=>setRunning(v=>!v)}>{running?'Pause':'Start session'}</Button><Button variant="secondary" onClick={reset}>Reset</Button></div><p className="timer-tip">Tip: silence notifications and keep only the materials you need nearby.</p></SectionCard><SectionCard title="A simple ritual" subtitle="Before you begin"><div className="ritual-list"><div><span>01</span><p><strong>Choose one goal</strong><small>What will you finish this session?</small></p></div><div><span>02</span><p><strong>Clear your space</strong><small>Close tabs you don’t need.</small></p></div><div><span>03</span><p><strong>Start small</strong><small>Just focus until the timer ends.</small></p></div></div></SectionCard></div></>}
+import FocusTimer from '../components/FocusTimer'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
+
+export default function FocusPage({ duration }) {
+  const [mode, setMode] = useState('Study')
+
+  useDocumentTitle('Focus')
+
+  return (
+    <>
+      <div className="page-heading">
+        <div>
+          <p className="eyebrow">MAKE SPACE FOR DEEP WORK</p>
+          <h1>Focus room</h1>
+          <p className="muted">
+            Step away from distractions and work on one thing.
+          </p>
+        </div>
+      </div>
+
+      <div className="focus-grid">
+        <SectionCard title="Choose your session">
+          <div className="timer-modes">
+            <button
+              className={mode === 'Study' ? 'selected' : ''}
+              onClick={() => setMode('Study')}
+            >
+              Study · {duration} min
+            </button>
+
+            <button
+              className={mode === 'Break' ? 'selected' : ''}
+              onClick={() => setMode('Break')}
+            >
+              Short break · 5 min
+            </button>
+          </div>
+
+          <FocusTimer
+            key={`${mode}-${duration}`}
+            mode={mode}
+            duration={duration}
+          />
+        </SectionCard>
+
+        <SectionCard
+          title="A simple ritual"
+          subtitle="Before you begin"
+        >
+          <div className="ritual-list">
+            <div>
+              <span>01</span>
+              <p>
+                <strong>Choose one goal</strong>
+                <small>What will you finish this session?</small>
+              </p>
+            </div>
+
+            <div>
+              <span>02</span>
+              <p>
+                <strong>Clear your space</strong>
+                <small>Close tabs you don't need.</small>
+              </p>
+            </div>
+
+            <div>
+              <span>03</span>
+              <p>
+                <strong>Start small</strong>
+                <small>Just focus until the timer ends.</small>
+              </p>
+            </div>
+          </div>
+        </SectionCard>
+      </div>
+    </>
+  )
+}
