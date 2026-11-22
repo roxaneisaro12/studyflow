@@ -1,2 +1,24 @@
-import {Link} from 'react-router-dom'
-export default function NotFoundPage(){return <div className="not-found panel"><p className="eyebrow">404 · PAGE NOT FOUND</p><h1>This page wandered off.</h1><p className="muted">The page you’re looking for doesn’t exist.</p><Link className="btn btn-primary" to="/">Back to dashboard</Link></div>}
+
+import { Link } from 'react-router-dom'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
+
+export default function NotFoundPage() {
+  useDocumentTitle('Page Not Found')
+
+  return (
+    <section className="not-found">
+      <p className="eyebrow">ERROR 404</p>
+
+      <h1>Page not found</h1>
+
+      <p className="muted">
+        Sorry, the page you are looking for does not exist
+        or may have been moved.
+      </p>
+
+      <Link to="/" className="btn btn-primary">
+        Return to Dashboard
+      </Link>
+    </section>
+  )
+}
